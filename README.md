@@ -51,6 +51,10 @@ This produces a **single compact representation per image**, enabling scalable s
 git clone https://github.com/pihash2k/SoIR.git
 cd SoIR
 
+# Create venv environment
+python3 -m venv soir
+source soir/bin/activate
+
 # Install core dependencies
 pip install -r requirements.txt
 
