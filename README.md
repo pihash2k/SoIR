@@ -20,7 +20,6 @@ This repository implements MaO (Multi-object Attention Optimization) for Small O
 1. **Dataset Preparation**: Process datasets with OWLv2 detection + SAM segmentation
 - ⚠️ **OPTIONAL** if you already have pre-computed detections and masks
 - ⚠️ **MANDATORY** if you only have raw images (requires `segment-anything` package)
-- 📦 Download datasets from: <https://github.com/pihash2k/VoxDet-SoIR/tree/master>
 1. **Stage A - Multi-Object Fine-tuning**: Train visual encoders on multiple objects per image
 1. **Stage B - Attention Optimization**: Refine representations using attention-based mask alignment
 1. **Index Creation**: Build FAISS indices for efficient similarity search
@@ -81,24 +80,9 @@ pip install segment-anything
 **⚠️ MANDATORY if you don’t have pre-computed detections and masks:**
 
 ```bash
-# For VoxDet
 python scripts/create_masked_dataset.py \
-    --input_dir /path/to/voxdet/images \
-    --output_dir /path/to/voxdet/masked \
-    --sam_checkpoint /path/to/sam_vit_h_4b8939.pth \
-    --owlv2_model google/owlv2-base-patch16-ensemble
-
-# For INSTRE-XS
-python scripts/create_masked_dataset.py \
-    --input_dir /path/to/instre_xs/images \
-    --output_dir /path/to/instre_xs/masked \
-    --sam_checkpoint /path/to/sam_vit_h_4b8939.pth \
-    --owlv2_model google/owlv2-base-patch16-ensemble
-
-# For PerMiR
-python scripts/create_masked_dataset.py \
-    --input_dir /path/to/permir/images \
-    --output_dir /path/to/permir/masked \
+    --input_dir /path/to/dataset/images \
+    --output_dir /path/todataset/masked \
     --sam_checkpoint /path/to/sam_vit_h_4b8939.pth \
     --owlv2_model google/owlv2-base-patch16-ensemble
 ```
@@ -149,14 +133,9 @@ python create_index.py \
 
 #### **Option B: Fine-tuned MaO (Recommended for Best Results) ⭐**
 
-Fine-tune the model on your dataset using LoRA adapters for optimal performance.
+Use our pre-trained models, fine-tunned with LoRA
 
 **Performance:** VoxDet mAP ~80-84% | PerMiR mAP ~90% | INSTRE-XS mAP ~90-91%
-
-**Requirements:**
-
-- Training data from your dataset
-- LoRA weights checkpoint (obtained after fine-tuning)
 
 ```bash
 # Using DINOv2 with MaO + LoRA fine-tuning (BEST: 83.70% mAP on VoxDet)
@@ -167,10 +146,8 @@ python create_index.py \
     vec_dim=768 \
     mi_alpha=0.03 \
     lora_adapt=true \
-    lora_rank=256 \
-    weights=/path/to/dinov2_lora_weights.ckpt \
-    global_features=true \
-    anns_file=/path/to/voxdet/annotations.pt
+    lora_rank=256 \ weights=/path/to/dinov2_lora_weights.ckpt \
+    global_features=true \   anns_file=/path/to/voxdet/annotations.pt
 
 # Using CLIP with MaO + LoRA fine-tuning (79.86% mAP on VoxDet)
 python create_index.py \
@@ -179,10 +156,8 @@ python create_index.py \
     vec_dim=512 \
     mi_alpha=0.03 \
     lora_adapt=true \
-    lora_rank=256 \
-    weights=/path/to/clip_lora_weights.ckpt \
-    global_features=true \
-    anns_file=/path/to/voxdet/annotations.pt
+    lora_rank=256 \    weights=/path/to/clip_lora_weights.ckpt \
+    global_features=true \   anns_file=/path/to/voxdet/annotations.pt
 ```
 
 **Fine-tuning Parameters:**
@@ -199,31 +174,6 @@ python create_index.py \
 1. Use the checkpoint path in the `weights` parameter
 
 -----
-
-### Step 3: Search and Evaluate
-
-```bash
-# Search on VoxDet
-python search_index.py \
-    dataset=voxdet \
-    experiment=mao_experiment \
-    k_search=100 \
-    features_dir=/path/to/features
-
-# Search on INSTRE-XS
-python search_index.py \
-    dataset=instre_xs \
-    experiment=mao_experiment \
-    k_search=100 \
-    features_dir=/path/to/features
-
-# Search on PerMiR
-python search_index.py \
-    dataset=permir \
-    experiment=mao_experiment \
-    k_search=100 \
-    features_dir=/path/to/features
-```
 
 ## MaO Configuration Parameters
 
@@ -391,19 +341,6 @@ INSTRE-XXS is the **most challenging small object subset** with very tiny object
 - `bboxes`: List of `[x1, y1, x2, y2]` bounding boxes (one per object)
 - `scores`: List of detection confidence scores (0-1 range)
 - All three lists must have the **same length** (one entry per object)
-
-**When to use pre-computed annotations:**
-✅ You already ran object detection (e.g., OWLv2, Faster R-CNN) on your dataset
-✅ You already have segmentation masks (e.g., SAM, Mask R-CNN) for detected objects
-✅ Your annotations follow the format above
-✅ Skip `create_masked_dataset.py` and `segment-anything` installation
-✅ Datasets downloaded from [VoxDet-SoIR](https://github.com/pihash2k/VoxDet-SoIR/tree/master) may already include this
-
-**When you MUST run `create_masked_dataset.py`:**
-❌ You only have raw images without detections
-❌ You have bounding boxes but no segmentation masks
-❌ Your detection/mask format differs from above
-❌ Install `segment-anything` and run the script to generate `captions.pt`
 
 ## Multi-object Attention Optimization (MaO) - Detailed
 
