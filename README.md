@@ -1,4 +1,4 @@
-# SoIR - Small Object Instance Retrieval
+# SoIR - Small Object Image Retrieval
 
 A standalone instance retrieval system with **Mask Inversion** for computing localized embeddings. Supports multiple vision foundation models: **DINOv2**, **SigLIP**, and **CLIP**.
 
