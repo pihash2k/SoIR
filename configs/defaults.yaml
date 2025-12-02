@@ -1,0 +1,74 @@
+hydra:
+  run:
+    dir: outputs/${dataset}_${run_type}/${now:%d-%m-%Y_%H-%M-%S}-${run_name}
+  job:
+    chdir: True
+
+# Dataset and run configuration
+dataset: custom_dataset
+run_type: retrieval
+run_name: experiment
+
+# Extractor configuration
+extractor: dinov2_mi_features
+B_model: false
+vec_dim: 768
+global_features: false
+
+# Mask Inversion parameters
+mi_alpha: 0.03
+mi_beta: 0.0
+mi_sum: false
+mi_iterations: 100
+mi_layer_index: -1
+
+# LoRA adaptation
+lora_adapt: false
+lora_rank: 256
+lora_alpha: 32
+weights: null
+
+# Image preprocessing
+smart_crop: false
+dumb_crop: false
+crop: false
+mask_input: false
+full_mask: false
+no_center_crop: false
+no_query_crop: false
+no_gallery_crop: false
+no_resize: false
+
+# Dataset paths
+anns_file: null
+captions_file: null
+gallery: null
+features_dir: null
+ds_inds_file: null
+
+# Search parameters
+k_search: 100
+max_k_search: 1000000
+save_knns: true
+experiment: null
+
+# Misc
+tag: ""
+add_string: ""
+debug: false
+only_create: false
+only_gallery: false
+rerank: false
+save_gallery_embeddings: false
+no_faiss: false
+avg_multiple_vecs: false
+single_from_sc: true
+
+# Advanced
+read_dataset: true
+max_ds_index: null
+gallery_chunk_size: 10000
+subset: "all"
+T2I: false
+query_extractor: null
+query_extractor_args: null
