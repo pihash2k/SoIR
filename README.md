@@ -235,10 +235,14 @@ features = extractor.extract(image)  # Shape: (768,)
 
 If you use this code, please cite:
 
+
+
 ```bibtex
-@article{soir2024,
-    title={SoIR: Salient Object Instance Retrieval with Mask Inversion},
-    year={2024}
+@inproceedings{green2025findyourneedle,
+  author={Green, Michael and Levy, Matan and Tzachor, Issar and Samuel, Dvir and Darshan, Nir and Ben-Ari, Rami},
+  title={Find your Needle: Small Object Image Retrieval via Multi-Object Attention Optimization},
+  booktitle={Advances in Neural Information Processing Systems (NeurIPS)},
+  year={2025}
 }
 ```
 
