@@ -38,7 +38,7 @@ This produces a **single compact representation per image**, enabling scalable s
 |--------------------|---------------|-------------|-------------------------|----------------------|
 |`dinov2_mi_features`|DINOv2-Base    |768          |**83.70%**               |**70.20%**            |
 |`clip_mi_features`  |CLIP ViT-B/16  |512          |**79.86%**               |**65.22%**            |
-|`siglip_mi_features`|SigLIP-Base-384|768          |High performance expected|-                     |
+|`siglip_mi_features`|SigLIP-Base-384|768          | - |-                     |
 
 **Note:** Results shown are for VoxDet. Performance varies across datasets (see Benchmarks section below).
 
